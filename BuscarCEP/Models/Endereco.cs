@@ -12,11 +12,11 @@ namespace BuscarCEP.Models
         public string logradouro { get; set; }
         public string bairro { get; set; }
         public string uf { get; set; }
-        public long unidade { get; set; }
+        public long? unidade { get; set; }
         public int ibge { get; set; }
         public string gia { get; set; }
 
-        public Endereco(string cep, string logradouro, string bairro, string uf, long unidade, int ibge, string gia)
+        public Endereco(string cep, string logradouro, string bairro, string uf, long? unidade, int ibge, string gia)
         {
             this.cep = cep;
             this.logradouro = logradouro;

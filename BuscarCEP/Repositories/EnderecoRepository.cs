@@ -24,6 +24,7 @@ namespace BuscarCEP.Repositories
 
         public List<Endereco> BuscarPorUF(string UF)
         {
+            UF = UF.ToLower();
             return _connectionContext.Enderecos.Where(e => e.uf == UF).ToList();
         }
 

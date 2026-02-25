@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BuscarCEP.Controllers
 {
     [ApiController]
-    [Route("/endereco")]
+    [Route("endereco")]
     public class EnderecoController : ControllerBase
     {
         private readonly IEnderecoRepository _enderecoRepository;
@@ -22,25 +22,28 @@ namespace BuscarCEP.Controllers
         }
 
         [HttpPost]
-        public IActionResult Adicionar(EnderecoViewModel enderecoViewModel)
+        public async Task<IActionResult> Adicionar(string cep)
         {
-            // Todo - TryCatch, trocar repository para service, com validações
-            var endereco = new Endereco(
-                enderecoViewModel.cep,
-                enderecoViewModel.logradouro,
-                enderecoViewModel.bairro,
-                enderecoViewModel.uf,
-                int.Parse(enderecoViewModel.unidade),
-                enderecoViewModel.ibge,
-                enderecoViewModel.gia
-                );
+            try
+            {
+                await _cepService.IncluirEndereco(cep);
 
-            _enderecoRepository.Adicionar(endereco);
-            return Ok();
+                return Created("endereco", null); // 201 (Criado)
+
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
         }
 
         [HttpGet]
-        public IActionResult BuscarTodos()
+        public IActionResult BuscarEnderecos()
         {
             // Todo - TryCatch, trocar repository para service, com validações
             var enderecos = _enderecoRepository.BuscarTodos();
@@ -48,7 +51,7 @@ namespace BuscarCEP.Controllers
         }
 
         [HttpGet]
-        [Route("/cep/{cep}")]
+        [Route("cep/{cep}")]
         public IActionResult BuscarPorCEP(string cep)
         {
             try
@@ -67,16 +70,16 @@ namespace BuscarCEP.Controllers
         }
 
         [HttpGet]
-        [Route("/uf/{uf}")]
+        [Route("uf/{uf}")]
         public IActionResult BuscarPorUF(string uf)
         {
             // Todo - TryCatch, trocar repository para service, com validações
-            var enderecos = _enderecoRepository.BuscarPorUF(uf);
+            var enderecos = _cepService.BuscarEnderecosPorUF(uf);
             return Ok(enderecos);
         }
 
         [HttpGet]
-        [Route("/via-cep/{cep}")]
+        [Route("via-cep/{cep}")]
         public IActionResult BuscarViaCep(string cep)
         {
             // Todo - TryCatch, trocar repository para service, com validações
