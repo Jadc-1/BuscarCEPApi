@@ -1,3 +1,6 @@
+using BuscarCEP.Repositories;
+using BuscarCEP.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddTransient<IEnderecoRepository, EnderecoRepository>();
+builder.Services.AddTransient<IViaCepService, ViaCepServicev>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
