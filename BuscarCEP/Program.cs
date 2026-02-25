@@ -10,7 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddTransient<IEnderecoRepository, EnderecoRepository>();
-builder.Services.AddTransient<IViaCepService, ViaCepServicev>();
+builder.Services.AddTransient<IViaCepService, ViaCepService>();
+builder.Services.AddTransient<ICepService, CepService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

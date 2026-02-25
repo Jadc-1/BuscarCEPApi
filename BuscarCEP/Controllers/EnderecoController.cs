@@ -12,22 +12,25 @@ namespace BuscarCEP.Controllers
     {
         private readonly IEnderecoRepository _enderecoRepository;
         private readonly IViaCepService _viaCepService;
+        private readonly ICepService _cepService;
 
-        public EnderecoController(IEnderecoRepository enderecoRepository, IViaCepService viaCepService)
+        public EnderecoController(IEnderecoRepository enderecoRepository, IViaCepService viaCepService, ICepService cepService)
         {
             _enderecoRepository = enderecoRepository;
             _viaCepService = viaCepService;
+            _cepService = cepService;
         }
 
         [HttpPost]
         public IActionResult Adicionar(EnderecoViewModel enderecoViewModel)
         {
+            // Todo - TryCatch, trocar repository para service, com validações
             var endereco = new Endereco(
                 enderecoViewModel.cep,
                 enderecoViewModel.logradouro,
                 enderecoViewModel.bairro,
                 enderecoViewModel.uf,
-                enderecoViewModel.unidade,
+                int.Parse(enderecoViewModel.unidade),
                 enderecoViewModel.ibge,
                 enderecoViewModel.gia
                 );
@@ -39,6 +42,7 @@ namespace BuscarCEP.Controllers
         [HttpGet]
         public IActionResult BuscarTodos()
         {
+            // Todo - TryCatch, trocar repository para service, com validações
             var enderecos = _enderecoRepository.BuscarTodos();
             return Ok(enderecos);
         }
@@ -47,14 +51,26 @@ namespace BuscarCEP.Controllers
         [Route("/cep/{cep}")]
         public IActionResult BuscarPorCEP(string cep)
         {
-            var enderecos = _enderecoRepository.BuscarPorCEP(cep);
-            return Ok(enderecos);
+            try
+            {
+                var endereco = _cepService.BuscarEnderecoPorCEP(cep);
+                return Ok(endereco);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);  // 400 (erro de solicitação)
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);  // 404 (não encontrado)
+            }
         }
 
         [HttpGet]
         [Route("/uf/{uf}")]
         public IActionResult BuscarPorUF(string uf)
         {
+            // Todo - TryCatch, trocar repository para service, com validações
             var enderecos = _enderecoRepository.BuscarPorUF(uf);
             return Ok(enderecos);
         }
@@ -63,6 +79,7 @@ namespace BuscarCEP.Controllers
         [Route("/via-cep/{cep}")]
         public IActionResult BuscarViaCep(string cep)
         {
+            // Todo - TryCatch, trocar repository para service, com validações
             var endereco = _viaCepService.BuscarEnderecoPorCEP(cep);
             return Ok(endereco);
         }

@@ -27,5 +27,9 @@ namespace BuscarCEP.Repositories
             return _connectionContext.Enderecos.Where(e => e.uf == UF).ToList();
         }
 
+        public List<Endereco> BuscarPorViaCep(string cep)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
