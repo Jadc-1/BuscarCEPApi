@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+
+}
+@model BuscarCEPInterface.Models.BuscarCEPViewModel
+
+<div class="master">
+    <div id="cep-container">
+        <form class="formulario">
+            <fieldset>
+                <legend>Pesquisar por Cep</legend>
+                <div id="cep">
+                    <label>Digite o CEP:</label>
+                    <input type="text" name="cep" maxlength="8" pattern="\d{5}-\d{3}" placeholder="12345-678" required />
+                    <label>
+                        <input type="checkbox" name="BuscarNaBase" value="true" /> Buscar na base de dados
+                    </label>
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div>
+        <form class="formulario">
+            <fieldset>
+                <legend>Pesquisar por UF</legend>
+                <label>Digite a UF:</label>
+                <select id="uf" name="uf">
+                    <option value="">Selecione a UF</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+ 
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>John</td>
+            <td>Doe</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+

@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="BuscarCEP/BuscarCEP.csproj" />
+  <Project Path="BuscarCEPInterface/BuscarCEPInterface.csproj" Id="563567e2-bcee-45e4-908e-1f50d9815d4e" />
 </Solution>
