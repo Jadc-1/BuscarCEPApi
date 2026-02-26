@@ -22,13 +22,15 @@ namespace BuscarCEP.Services
             using var client = new WebClient();
             client.Encoding = System.Text.Encoding.UTF8;
             var result = client.DownloadString(viaCEPUrl);
- 
+
             if (result.Contains("\"erro\": true"))
             {
                 throw new Exception("CEP não encontrado");
             }
 
             EnderecoViewModel? jsonRetorno = JsonConvert.DeserializeObject<EnderecoViewModel>(result);
+            if (jsonRetorno == null || jsonRetorno?.cep == null) throw new KeyNotFoundException("Endereço não encontrado para o CEP informado");
+
             return Task.FromResult(jsonRetorno);
         }
     }

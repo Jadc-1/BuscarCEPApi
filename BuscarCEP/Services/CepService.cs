@@ -9,7 +9,7 @@ namespace BuscarCEP.Services
     {
         private readonly IEnderecoRepository _enderecoRepository;
         private readonly IViaCepService _viaCepService;
-        
+
         public CepService(IEnderecoRepository enderecoRepository, IViaCepService viaCepService)
         {
             _enderecoRepository = enderecoRepository;
@@ -30,12 +30,12 @@ namespace BuscarCEP.Services
             {
                 throw new KeyNotFoundException("Endereço não encontrado para o CEP informado");
             }
-            return new EnderecoViewModel(endereco.cep, 
-                endereco.logradouro, 
-                endereco.bairro, 
-                endereco.uf, 
-                endereco.unidade.ToString(), 
-                endereco.ibge, 
+            return new EnderecoViewModel(endereco.cep,
+                endereco.logradouro,
+                endereco.bairro,
+                endereco.uf,
+                endereco.unidade,
+                endereco.ibge,
                 endereco.gia);
         }
 
@@ -51,30 +51,25 @@ namespace BuscarCEP.Services
             }
 
             var enderecos = _enderecoRepository.BuscarPorUF(uf).ToList();
-            var listaEnderecosViewModel = new List<EnderecoViewModel>();   
+            var listaEnderecosViewModel = new List<EnderecoViewModel>();
             foreach (var endereco in enderecos)
             {
                 var enderecoViewModel = new EnderecoViewModel(endereco.cep,
                     endereco.logradouro,
                     endereco.bairro,
                     endereco.uf,
-                    endereco.unidade.ToString(),
+                    endereco.unidade,
                     endereco.ibge,
                     endereco.gia);
 
                 listaEnderecosViewModel.Add(enderecoViewModel);
-            } 
+            }
             return listaEnderecosViewModel;
         }
 
         public async Task<Endereco> IncluirEndereco(string cep)
         {
             cep = cep.Replace("-", "").Trim();
-  
-            if (EnderecoExistente(cep))
-            {
-                throw new ArgumentException("Endereço já cadastrado no banco");
-            }
 
             if (string.IsNullOrWhiteSpace(cep))
             {
@@ -89,31 +84,26 @@ namespace BuscarCEP.Services
             var endereco = await _viaCepService.BuscarEnderecoPorCEP(cep);
             long unidade = 0;
 
-            if (!string.IsNullOrEmpty(endereco.unidade))
-            {
-                long.TryParse(endereco.unidade, out unidade); // Converte a string para long, para salvar no banco
-            }
-
             if (endereco == null)
             {
                 throw new ArgumentException("Cep não encontrado");
             }
             else
             {
-                var novoEndereco = new Endereco(endereco.cep,
-                    endereco.logradouro,
-                    endereco.bairro,
-                    endereco.uf.ToLower(),
-                    unidade,
-                    endereco.ibge,
-                    endereco.gia);
+                var novoEndereco = new Endereco(cep,
+                endereco.logradouro,
+                endereco.bairro,
+                endereco.uf.ToLower(),
+                unidade,
+                endereco.ibge,
+                endereco.gia);
 
-                _enderecoRepository.Adicionar(novoEndereco);
+                if (!EnderecoExistente(cep)) _enderecoRepository.Adicionar(novoEndereco);
                 return novoEndereco;
             }
 
         }
-        
+
         public bool EnderecoExistente(string cep)
         {
             var endereco = _enderecoRepository.BuscarPorCEP(cep).FirstOrDefault();
@@ -125,7 +115,8 @@ namespace BuscarCEP.Services
             if (_enderecoRepository.BuscarTodos().Count() == 0)
             {
                 throw new KeyNotFoundException("Nenhum endereço encontrado");
-            } else
+            }
+            else
             {
                 var enderecos = _enderecoRepository.BuscarTodos().ToList();
                 var listaEnderecosViewModel = new List<EnderecoViewModel>();
@@ -135,7 +126,7 @@ namespace BuscarCEP.Services
                         endereco.logradouro,
                         endereco.bairro,
                         endereco.uf,
-                        endereco.unidade.ToString(),
+                        endereco.unidade,
                         endereco.ibge,
                         endereco.gia);
                     listaEnderecosViewModel.Add(enderecoViewModel);

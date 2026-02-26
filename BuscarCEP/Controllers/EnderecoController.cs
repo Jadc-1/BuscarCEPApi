@@ -26,9 +26,9 @@ namespace BuscarCEP.Controllers
         {
             try
             {
-                await _cepService.IncluirEndereco(cep);
+                var endereco = await _cepService.IncluirEndereco(cep);
 
-                return Created("endereco", null); // 201 (Criado)
+                return Created("endereco", endereco); // 201 (Criado)
 
             }
             catch (ArgumentException ex)
@@ -82,9 +82,16 @@ namespace BuscarCEP.Controllers
         [Route("via-cep/{cep}")]
         public IActionResult BuscarViaCep(string cep)
         {
-            // Todo - TryCatch, trocar repository para service, com validações
-            var endereco = _viaCepService.BuscarEnderecoPorCEP(cep);
-            return Ok(endereco);
+            try
+            {
+                // Todo - TryCatch, trocar repository para service, com validações
+                var endereco = _viaCepService.BuscarEnderecoPorCEP(cep);
+                return Ok(endereco);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);  // 404 (não encontrado)
+            }
         }
     }
 }

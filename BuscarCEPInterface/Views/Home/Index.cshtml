@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 
 }
@@ -7,23 +6,23 @@
 
 <div class="master">
     <div id="cep-container">
-        <form class="formulario">
+        <form class="formulario" asp-controller="Home" asp-action="BuscarCEP" method="post">
             <fieldset>
                 <legend>Pesquisar por Cep</legend>
                 <div id="cep">
                     <label>Digite o CEP:</label>
-                    <input type="text" name="cep" maxlength="8" pattern="\d{5}-\d{3}" placeholder="12345-678" required />
+                    <input type="text" name="cep" maxlength="8" pattern="\d{5}\d{3}" placeholder="12345678" required />
                     <label>
-                        <input type="checkbox" name="BuscarNaBase" value="true" /> Buscar na base de dados
+                        <input type="checkbox" name="buscarNaBase" value="true" /> Buscar na base de dados
                     </label>
-                    <button type="submit" class="btn btn-primary">Buscar</button>
+                    <button type="submit" class="btn btn-primary" formaction="@Url.Action("BuscarCEP", "Home")">Buscar</button>
                 </div>
             </fieldset>
         </form>
     </div>
 
     <div>
-        <form class="formulario">
+        <form class="formulario" asp-controller="Home" asp-action="BuscarCEP" method="post">
             <fieldset>
                 <legend>Pesquisar por UF</legend>
                 <label>Digite a UF:</label>
@@ -57,41 +56,54 @@
                     <option value="SE">Sergipe</option>
                     <option value="TO">Tocantins</option>
                 </select>
-                <button type="submit" class="btn btn-primary">Buscar</button>
+                <button type="submit" class="btn btn-primary" formaction="@Url.Action("BuscarPorUf", "Home")">Buscar</button>
             </fieldset>
         </form>
     </div>
+
+    <div class="mt-3">
+        @if (Model?.Enderecos != null && Model.Enderecos.Count > 0)
+        {
+            <table class="table table-striped table-bordered table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">CEP</th>
+                        <th scope="col">Logradouro</th>
+                        <th scope="col">Bairro</th>
+                        <th scope="col">UF</th>
+                        <th scope="col">Unidade</th>
+                        <th scope="col">IBGE</th>
+                        <th scope="col">GIA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var index = 1;
+                    }
+                    @foreach (var endereco in Model.Enderecos)
+                    {
+                        <tr>
+                            <th scope="row">@index</th>
+                            <td>@endereco.cep</td>
+                            <td>@endereco.logradouro</td>
+                            <td>@endereco.bairro</td>
+                            <td>@endereco.uf</td>
+                            <td>@endereco.unidade</td>
+                            <td>@endereco.ibge</td>
+                            <td>@endereco.gia</td>
+                        </tr>
+                        index++;
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">Nenhum endereço encontrado.</div>
+        }
+
+    </div>
 </div>
 
- 
-<table class="table table-dark table-striped">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td></td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td></td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>John</td>
-            <td>Doe</td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
 

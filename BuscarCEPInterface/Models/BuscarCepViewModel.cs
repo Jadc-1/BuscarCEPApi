@@ -7,7 +7,7 @@ namespace BuscarCEPInterface.Models
         public string? Cep { get; set; }
         public EnderecoViewModel? EnderecoCep { get; set; }
 
-        public List<EnderecoViewModel>? EnderecosUf { get; set; }
+        public List<EnderecoViewModel>? Enderecos { get; set; }
 
         public bool PossuiCadastro { get; set; }
 
